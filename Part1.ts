@@ -6,7 +6,7 @@ const enum TransferType {
 }
 
 type Transfer = {
-    hash: string;
+    blockHash: string;
     blockNumber: number;
     address: string;
     amount: number;
@@ -34,8 +34,8 @@ const addresses = ['0x9F89836C22f250595DEA30327af026bA1c029f28', '0x812c44b6661a
  */
 async function getRangedTransferEvents(years: number, addresses: string[]): Promise<Transfer[]> {
     const currentBlock = await provider.getBlockNumber();
-    const blocksPerYear = 2252571;
-    let startBlock = currentBlock - Math.floor(blocksPerYear * years);
+    const averageBlocksPerYear = 2252571;
+    let startBlock = currentBlock - Math.floor(averageBlocksPerYear * years);
     const maxBlockRange = 49000;
 
     const transfers: Transfer[] = [];
@@ -68,7 +68,7 @@ async function getRangedTransferEvents(years: number, addresses: string[]): Prom
 
                 for (const event of events) {
                     const transferEvent: Transfer = {
-                        hash: event.transactionHash,
+                        blockHash: event.transactionHash,
                         blockNumber: event.blockNumber,
                         address: filter.address,
                         amount: Number(event.data),
