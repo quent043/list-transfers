@@ -27,6 +27,44 @@ type Transfer = {
     amount: number;
     transferType: TransferType;
 }
+
+
+
+/**
+ * @notice: example of return function executed 26/02/2024 - 6:00 UTC
+ * @dev: BLocks are regularly pruned on the provided RPC. Results may differ if executed later in time
+ */
+transfers [
+    {
+        blockHash: '0xfa659163847b6d5b814bd5a8134e847778d4b909c7d0e9d41dca0812a1290cea',
+        blockNumber: 46340704,
+        address: '0x9F89836C22f250595DEA30327af026bA1c029f28',
+        amount: 16,
+        transferType: 'Sent'
+    },
+        {
+            blockHash: '0x36249e5ccddd87e8a2f8a6f297fcb059e6c47b7e2a3ba84b5687413087d69a97',
+            blockNumber: 46340719,
+            address: '0x9F89836C22f250595DEA30327af026bA1c029f28',
+            amount: 16,
+            transferType: 'Sent'
+        },
+        {
+            blockHash: '0xfa659163847b6d5b814bd5a8134e847778d4b909c7d0e9d41dca0812a1290cea',
+            blockNumber: 46340704,
+            address: '0x4B3380d3A8C1AF85e47dBC1Fc6C3f4e0c8F78fEa',
+            amount: 16,
+            transferType: 'Received'
+        },
+        {
+            blockHash: '0x36249e5ccddd87e8a2f8a6f297fcb059e6c47b7e2a3ba84b5687413087d69a97',
+            blockNumber: 46340719,
+            address: '0x4B3380d3A8C1AF85e47dBC1Fc6C3f4e0c8F78fEa',
+            amount: 16,
+            transferType: 'Received'
+        }
+    ]
+
 ```
 
 ----

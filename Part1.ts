@@ -34,7 +34,7 @@ const provider = new ethers.JsonRpcProvider(providerUrl);
 /**
  * @notice: Function variables
  */
-const years = 0.01;
+const years = 0.02;
 const addresses = ['0x9F89836C22f250595DEA30327af026bA1c029f28', '0x812c44b6661aA519aA590B7DE43d8F1cf5f6D038', '0x4B3380d3A8C1AF85e47dBC1Fc6C3f4e0c8F78fEa'];
 
 
