@@ -1,5 +1,9 @@
 import {ethers, id, zeroPadValue} from "ethers";
 
+
+/**
+ * @notice: Types and enums
+ */
 const enum TransferType {
     SENT= "Sent",
     RECEIVED = "Received"
@@ -19,18 +23,27 @@ type enrichedFilter = {
     filter: ethers.Filter;
 }
 
-
+/**
+ * @notice: Definitions
+ */
+const BAR_TOKEN_ADDRESS = '0x5B572ef94C96B6d95B0ADD49664b945eAb671dE8';
 const providerUrl = 'https://polygon-mumbai-bor.publicnode.com';
 const provider = new ethers.JsonRpcProvider(providerUrl);
-const BAR_TOKEN_ADDRESS = '0x5B572ef94C96B6d95B0ADD49664b945eAb671dE8';
 
+
+/**
+ * @notice: Function variables
+ */
 const years = 0.01;
 const addresses = ['0x9F89836C22f250595DEA30327af026bA1c029f28', '0x812c44b6661aA519aA590B7DE43d8F1cf5f6D038', '0x4B3380d3A8C1AF85e47dBC1Fc6C3f4e0c8F78fEa'];
 
 
 /**
- * Get the transfer events for a given token and addresses where address is the sender or recipient
+ * @notice: Get the transfer events for a given token and addresses where address is the sender or recipient
  * @dev: Max block range per call is 50,000, so this functions loops on this amount over the average block amount per year
+ * @param: years: number of years to get the transfer events
+ * @param: addresses: addresses to check for transfers
+ * @returns: Transfer[] containing all detected transfers
  */
 async function getRangedTransferEvents(years: number, addresses: string[]): Promise<Transfer[]> {
     const currentBlock = await provider.getBlockNumber();
@@ -42,11 +55,13 @@ async function getRangedTransferEvents(years: number, addresses: string[]): Prom
 
     try {
         while (startBlock < currentBlock) {
-            let endBlock = startBlock + maxBlockRange > currentBlock ? currentBlock : startBlock + maxBlockRange;
+            const nextEndBlock = startBlock + maxBlockRange;
+            let endBlock = nextEndBlock > currentBlock ? currentBlock : nextEndBlock;
 
             let filters: enrichedFilter[] = [];
 
             addresses.forEach(address => {
+                // Add filters for sent transfers
                 filters.push({
                     address: address,
                     transferType: TransferType.SENT,
@@ -54,6 +69,7 @@ async function getRangedTransferEvents(years: number, addresses: string[]): Prom
                         topics:[id('Transfer(address,address,uint256)'), zeroPadValue(address, 32), null]
                     }
                 });
+                // Add filters for sent transfers
                 filters.push({
                     address: address,
                     transferType: TransferType.RECEIVED,
@@ -87,14 +103,3 @@ async function getRangedTransferEvents(years: number, addresses: string[]): Prom
 }
 
 getRangedTransferEvents(years, addresses);
-
-
-/**
- * Potential Improvements:
- *  - Use an Indexer such as TheGraph to index all transfers and use GraphQL queries to get this info instead of onChain calls.
- *  - Paginate results, even with TheGraph (max 1000 results per query)
- *  - Use third party node providers to get faster results
- *  - Use Tools like Moralis to query directly by timestamp instead on estimating block numbers
- *  - Use env variables for constants, RPC Urls, etc
- *  - I would need more infos on what this function will be used for and the context to provide more accurate improvements. eg: if meant to be a public API, implement DDOS protections (cloudflare)
- */
