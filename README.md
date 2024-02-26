@@ -10,7 +10,7 @@ ts-node Part1.ts
 ```
 
 ## Function
-This script inclides an async function taking 2 arguments: years and addresses. It returns a promise of an array of Transfer objects.
+This script includes an async function taking 2 arguments: years and addresses. It returns a promise of an array of Transfer objects.
 
 ```typescript
 async function getRangedTransferEvents(years: number, addresses: string[]): Promise<Transfer[]>;
@@ -33,11 +33,12 @@ type Transfer = {
 
 ## Possible Improvements
 
- - Current scripts are not accurate at all as not possible to query by timestamp
+ - Current scripts are not accurate, as not possible to query by timestamp
  - If the current approach is kept (query by block number), the first block number of each year could be recorded and used for queries instead of estimating the block number based on an average number of blocks mined per year
- - Use an Indexer such as TheGraph to index all transfers and use GraphQL queries to get this info per timestamp instead of onChain calls.
+ - Use an Indexer such as TheGraph to index all transfers or the BAR token and use GraphQL queries to get this info per timestamp instead of onChain calls.
  - With current method, very old block history has often been pruned, hence the need of using an indexer
  - Paginate results, even with TheGraph (max 1000 results per query)
+ - Create a centralized indexer for BAR token events, and have redundancy in case of failure
  - Use third party node providers to get faster results
  - Use Tools like Moralis to query directly by timestamp instead on estimating block numbers
  - Use env variables for constants, RPC Urls, etc
