@@ -79,10 +79,16 @@ async function getRangedTransferEvents(years: number, addresses: string[]): Prom
                 });
             })
 
-            for (const filter of filters) {
-                const events: ethers.Log[] = await provider.getLogs({ ...filter.filter, fromBlock: startBlock, toBlock: endBlock });
+            const promises: Promise<ethers.Log[]>[] = filters.map(filter =>
+                provider.getLogs({ ...filter.filter, fromBlock: startBlock, toBlock: endBlock })
+            );
 
-                for (const event of events) {
+            const results: ethers.Log[][] = await Promise.all(promises);
+
+            for(const [index, events] of results.entries()) {
+                const filter = filters[index];
+
+                for(const event of events) {
                     const transferEvent: Transfer = {
                         blockHash: event.transactionHash,
                         blockNumber: event.blockNumber,
